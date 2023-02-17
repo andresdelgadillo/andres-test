@@ -1,0 +1,40 @@
+# Compiled files
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+
+# logs
+*.log
+
+# Directories
+.terraform/
+
+# SSH Keys
+*.pem
+
+# Backup files
+*.bak
+
+# Ignored Terraform files
+*gitignore*.tf
+
+# Ignore Mac .DS_Store files
+.DS_Store
+
+# Ignored vscode files
+.vscode/
+
+.terraform.lock.hcl
+
+# Temp dir
+tmp/
+
+# Terraform Plan Files
+**/pending-change*
+**/terraform_plan.log
+**/terraform_apply.log
+
+# PYthon virtual environments
+**/.env
+**/env
+**/__pycache__

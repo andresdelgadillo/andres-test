@@ -1,0 +1,9 @@
+variable "vpc" {}
+variable "environment" {}
+variable "app_name" {}
+variable "private_subnets" {}
+variable "desired_capacity" {}
+variable "max_size" {}
+variable "min_size" {}
+variable "security_group_alb" {}
+variable "target_group" {}
