@@ -79,7 +79,7 @@ aws --region \<REGION\>  ssm start-session --target <INSTANCE ID> \
 --parameters '{"portNumber":["5432"],"localPortNumber":["5432"],"host":["<RDS ENDPOINT>"]}'
 ```
 
-The database credentials are store in the secrets with the following ID: *arn:aws:secretsmanager:\<REGION\>:\<ACCOUNT-ID\>:secret:andres-test-RDS-Credentials-test-\**.
+The database credentials are store in the secrets with the following ID: *arn:aws:secretsmanager:\<REGION\>:\<ACCOUNT-ID\>secret\:andres-test-RDS-Credentials-test-\**.
 
 ## Additional considerations
 - The application was expossed over port 80 because of the lack of an SSL certificate, but in a real environment it must be exposed over HTTPS on port 443.
