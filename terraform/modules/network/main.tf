@@ -35,10 +35,10 @@ resource "aws_internet_gateway" "igw" {
 }
 
 resource "aws_subnet" "subnet_pub" {
-  for_each          = toset([for k, v in var.subnets.public : k])
+  for_each          = var.subnets.public
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.subnets.public[each.key].cidr
-  availability_zone = format("%s%s", data.aws_region.current.name, var.subnets.public[each.key].az)
+  availability_zone =  "${data.aws_region.current.name}${var.subnets.public[each.key].az}"
   tags = {
     Name        = join("-", [var.vpc_name, "snet", each.key])
     Description = "${var.vpc_name} Public Subnet ${each.key}"
@@ -46,10 +46,10 @@ resource "aws_subnet" "subnet_pub" {
 }
 
 resource "aws_subnet" "subnet_pvt" {
-  for_each          = toset([for k, v in var.subnets.private : k])
+  for_each          = var.subnets.private
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.subnets.private[each.key].cidr
-  availability_zone = format("%s%s", data.aws_region.current.name, var.subnets.private[each.key].az)
+  availability_zone = "${data.aws_region.current.name}${var.subnets.private[each.key].az}"
   tags = {
     Name        = join("-", [var.vpc_name, "snet", each.key])
     Description = "${var.vpc_name} Private Subnet ${each.key}"
@@ -57,10 +57,10 @@ resource "aws_subnet" "subnet_pvt" {
 }
 
 resource "aws_subnet" "subnet_pvt_rds" {
-  for_each          = toset([for k, v in var.subnets.private_rds : k])
+  for_each          = var.subnets.private_rds
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.subnets.private_rds[each.key].cidr
-  availability_zone = format("%s%s", data.aws_region.current.name, var.subnets.private_rds[each.key].az)
+  availability_zone = "${data.aws_region.current.name}${var.subnets.private_rds[each.key].az}"
   tags = {
     Name        = join("-", [var.vpc_name, "snet", each.key])
     Description = "${var.vpc_name} Private RDS Subnet ${each.key}"
@@ -69,7 +69,7 @@ resource "aws_subnet" "subnet_pvt_rds" {
 
 
 resource "aws_route_table" "route_table_pub" {
-  for_each = toset([for k, v in var.subnets.public : k])
+  for_each = var.subnets.public
   vpc_id   = aws_vpc.vpc.id
   tags = {
     Name        = join("-", [aws_subnet.subnet_pub[each.key].tags.Name, "rttbl", "pub"])
@@ -78,14 +78,14 @@ resource "aws_route_table" "route_table_pub" {
 }
 
 resource "aws_route_table_association" "rta_pub" {
-  for_each = toset([for k, v in var.subnets.public : k])
+  for_each = var.subnets.public
 
   subnet_id      = aws_subnet.subnet_pub[each.key].id
   route_table_id = aws_route_table.route_table_pub[each.key].id
 }
 
 resource "aws_route_table" "route_table_pvt" {
-  for_each = toset([for k, v in var.subnets.private : k])
+  for_each = var.subnets.private
   vpc_id   = aws_vpc.vpc.id
   tags = {
     Name        = join("-", [aws_subnet.subnet_pvt[each.key].tags.Name, "rttbl", "pvt"])
@@ -94,7 +94,7 @@ resource "aws_route_table" "route_table_pvt" {
 }
 
 resource "aws_route_table" "route_table_pvt_rds" {
-  for_each = toset([for k, v in var.subnets.private_rds : k])
+  for_each = var.subnets.private_rds
   vpc_id   = aws_vpc.vpc.id
   tags = {
     Name        = join("-", [aws_subnet.subnet_pvt_rds[each.key].tags.Name, "rttbl", "pvt"])
@@ -103,21 +103,21 @@ resource "aws_route_table" "route_table_pvt_rds" {
 }
 
 resource "aws_route_table_association" "rta_pvt" {
-  for_each = toset([for k, v in var.subnets.private : k])
+  for_each = var.subnets.private
 
   subnet_id      = aws_subnet.subnet_pvt[each.key].id
   route_table_id = aws_route_table.route_table_pvt[each.key].id
 }
 
 resource "aws_route_table_association" "rta_pvt_rds" {
-  for_each = toset([for k, v in var.subnets.private_rds : k])
+  for_each = var.subnets.private_rds
 
   subnet_id      = aws_subnet.subnet_pvt_rds[each.key].id
   route_table_id = aws_route_table.route_table_pvt_rds[each.key].id
 }
 
 resource "aws_eip" "natips" {
-  for_each = toset([for k, v in var.subnets.public : k])
+  for_each = var.subnets.public
   vpc      = true
   tags = {
     Name        = join("-", [aws_subnet.subnet_pub[each.key].tags.Name, "natip"])
@@ -126,7 +126,7 @@ resource "aws_eip" "natips" {
 }
 
 resource "aws_nat_gateway" "natgws" {
-  for_each      = toset([for k, v in var.subnets.public : k])
+  for_each      = var.subnets.public
   allocation_id = aws_eip.natips[each.key].id
   subnet_id     = aws_subnet.subnet_pub[each.key].id
   depends_on    = [aws_internet_gateway.igw]
@@ -137,22 +137,22 @@ resource "aws_nat_gateway" "natgws" {
 }
 
 resource "aws_route" "ipv4_pub_routes" {
-  for_each               = toset([for k, v in var.subnets.public : k])
+  for_each               = var.subnets.public
   route_table_id         = aws_route_table.route_table_pub[each.key].id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.igw.id
 }
 
 resource "aws_route" "ipv4_pvt_routes" {
-  for_each               = toset([for k, v in var.subnets.private : k])
+  for_each               = var.subnets.private
   route_table_id         = aws_route_table.route_table_pvt[each.key].id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.natgws[tomap(var.subnets.private)[each.key].nat_subnet].id
+  nat_gateway_id         = aws_nat_gateway.natgws[each.value.nat_subnet].id
 }
 
 resource "aws_route" "ipv4_pvt_routes_rds" {
-  for_each               = toset([for k, v in var.subnets.private_rds : k])
+  for_each               = var.subnets.private_rds
   route_table_id         = aws_route_table.route_table_pvt_rds[each.key].id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.natgws[tomap(var.subnets.private_rds)[each.key].nat_subnet].id
+  nat_gateway_id         = aws_nat_gateway.natgws[each.value.nat_subnet].id
 }

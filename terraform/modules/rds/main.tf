@@ -26,7 +26,7 @@ resource "aws_security_group_rule" "allow_ec2_inbound" {
   to_port     = 5432
   protocol    = "tcp"
   # cidr_blocks              = ["10.0.0.0/23"]
-  source_security_group_id = var.security_group_ec2.id
+  source_security_group_id = var.security_group_ec2_id
   security_group_id        = aws_security_group.sg_rds.id
 }
 
@@ -37,14 +37,14 @@ resource "aws_security_group_rule" "allow_ec2_egress" {
   to_port     = 5432
   protocol    = "tcp"
   # cidr_blocks              = ["10.0.0.0/23"]
-  source_security_group_id = var.security_group_ec2.id
+  source_security_group_id = var.security_group_ec2_id
   security_group_id        = aws_security_group.sg_rds.id
 }
 
 resource "aws_security_group" "sg_rds" {
   name        = "${var.app_name}-rds_${var.environment}"
   description = "RDS ${var.app_name} security group"
-  vpc_id      = var.vpc.id
+  vpc_id      = var.vpc_id
 
   tags = {
     Name = "${var.app_name}-rds_${var.environment}"
@@ -96,10 +96,10 @@ resource "random_password" "master_password" {
 }
 
 resource "random_password" "username" {
-  length  = 6
+  length  = 8
   upper   = false
   special = false
-
+  numeric = false
 }
 
 resource "random_string" "secretname" {
