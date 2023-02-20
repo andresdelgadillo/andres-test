@@ -62,7 +62,7 @@ resource "aws_security_group_rule" "allow_rds_egress" {
 resource "aws_security_group" "sg_ec2" {
   name        = "${var.app_name}-ec2_${var.environment}"
   description = "EC2 ${var.app_name} security group"
-  vpc_id      = "${var.vpc_id}"
+  vpc_id      = var.vpc_id
 
   tags = {
     Name = "${var.app_name}-ec2_${var.environment}"
@@ -105,7 +105,7 @@ resource "aws_autoscaling_group" "ec2_launch_autoscaling" {
   max_size                  = var.max_size
   min_size                  = var.min_size
   vpc_zone_identifier       = var.private_subnets
-  target_group_arns         = "${var.target_group_arn}"
+  target_group_arns         = var.target_group_arn
   health_check_grace_period = 300
 
   launch_template {

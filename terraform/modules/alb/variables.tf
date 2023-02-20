@@ -1,6 +1,6 @@
 variable "environment" {
-    description = "Environment name prefix"
-    type = string
+  description = "Environment name prefix"
+  type        = string
 }
 
 variable "app_name" {
@@ -22,7 +22,7 @@ variable "allowed_cidr" {
 }
 
 variable "internal" {
-    description = "If true, the LB will be internal"
-    type = bool
-    default = true
+  description = "If true, the LB will be internal"
+  type        = bool
+  default     = true
 }

@@ -1,6 +1,6 @@
 variable "environment" {
-    description = "Environment name prefix"
-    type = string
+  description = "Environment name prefix"
+  type        = string
 }
 
 variable "app_name" {
@@ -14,21 +14,21 @@ variable "vpc_id" {
 }
 
 variable "security_group_ec2_id" {
-    description = "Security group ID to allow access from/to"
-    type        = string
+  description = "Security group ID to allow access from/to"
+  type        = string
 }
 
 variable "private_subnets_rds" {
   description = "A list of subnet IDs to be used by the RDS"
-  type        = list(string)  
+  type        = list(string)
 }
 
 variable "multi_az" {
-    description = "Specifies if the RDS instance is multi-AZ"
-    type = bool
-    default = false
+  description = "Specifies if the RDS instance is multi-AZ"
+  type        = bool
+  default     = false
 }
 variable "instance_class" {
-    description = "The RDS instance class"
-    type        = string
+  description = "The RDS instance class"
+  type        = string
 }

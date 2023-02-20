@@ -38,7 +38,7 @@ resource "aws_subnet" "subnet_pub" {
   for_each          = var.subnets.public
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.subnets.public[each.key].cidr
-  availability_zone =  "${data.aws_region.current.name}${var.subnets.public[each.key].az}"
+  availability_zone = "${data.aws_region.current.name}${var.subnets.public[each.key].az}"
   tags = {
     Name        = join("-", [var.vpc_name, "snet", each.key])
     Description = "${var.vpc_name} Public Subnet ${each.key}"
