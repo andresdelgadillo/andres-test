@@ -8,7 +8,7 @@ data "aws_region" "current" {
 }
 
 resource "aws_s3_bucket" "tf_s3_bucket" {
-  bucket = var.config.s3_bucket
+  bucket = var.s3_bucket
 }
 
 resource "aws_s3_bucket_acl" "tf_s3_bucket_acl" {

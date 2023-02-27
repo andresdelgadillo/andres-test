@@ -57,9 +57,9 @@ vpc_1 = {
   }
 }
 instances = {
-  desired_capacity = "1"
+  desired_capacity = "2"
   max_size         = "4"
-  min_size         = "1"
+  min_size         = "2"
 }
 rds = {
   instance_class = "db.t3.micro"

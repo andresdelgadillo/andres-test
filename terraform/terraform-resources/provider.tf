@@ -11,14 +11,14 @@ terraform {
 }
 
 provider "aws" {
-  region = var.config.aws_region_1
+  region = var.aws_region_1
   default_tags {
     tags = {
-      product-family   = "${var.config.tags.product-family}"
-      application-name = "${var.config.tags.application-name}"
-      account-name     = "${var.config.tags.account-name}"
-      environment      = "${var.config.tags.environment}"
-      managed-by       = "${var.config.tags.managed-by}"
+      product-family   = "${var.tags.product-family}"
+      application-name = "${var.tags.application-name}"
+      account-name     = "${var.tags.account-name}"
+      environment      = "${var.tags.environment}"
+      managed-by       = "${var.tags.managed-by}"
     }
   }
 }
